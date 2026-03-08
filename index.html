@@ -2,164 +2,119 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <!-- PWA 全屏沉浸式核心标签 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#050810">
   <title>量子口语觉醒</title>
+  
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- 引入 Phosphor Icons (轻量级图标库，替代 Lucide) -->
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <style>
-    /* 极客风样式设定 */
-    body { background-color: #050810; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; overflow: hidden; overscroll-behavior: none; }
+    body { background-color: #050810; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; overflow: hidden; overscroll-behavior: none; }
     .bg-grid { background-image: linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px); background-size: 2rem 2rem; opacity: 0.1; }
     .perspective-1000 { perspective: 1000px; }
-    
-    /* 隐藏滚动条 */
     ::-webkit-scrollbar { display: none; }
     
-    /* 卡片动画过渡 */
-    .card-transition { transition: transform 0.3s ease-out, opacity 0.3s ease-out, box-shadow 0.3s; }
-    .swipe-left { transform: translateX(-120%) rotate(-15deg); opacity: 0; }
-    .swipe-right { transform: translateX(120%) rotate(15deg); opacity: 0; }
+    /* 滑动动画 */
+    .card-transition { transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease-out, box-shadow 0.3s; }
+    .swipe-left { transform: translateX(-150%) rotate(-20deg) scale(0.8); opacity: 0; }
+    .swipe-right { transform: translateX(150%) rotate(20deg) scale(0.8); opacity: 0; }
     
-    /* 底部安全区 (适配刘海屏) */
-    .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+    /* 安全区适配 (刘海屏) */
+    .pt-safe { padding-top: env(safe-area-inset-top); }
+    .pb-safe { padding-bottom: calc(0.5rem + env(safe-area-inset-bottom)); }
     
-    /* 麦克风脉冲动画 */
-    @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-    .animate-pulse-red { animation: pulse-red 1.5s infinite; background-color: rgba(239,68,68,0.2); border-color: #ef4444; color: #ef4444; transform: scale(1.1); }
+    /* 麦克风高亮脉冲动画 */
+    @keyframes pulse-red { 
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8); transform: scale(1); } 
+      50% { box-shadow: 0 0 0 25px rgba(239, 68, 68, 0); transform: scale(1.15); } 
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); transform: scale(1); } 
+    }
+    .mic-active { 
+      animation: pulse-red 1.2s infinite; 
+      background-color: #ef4444 !important; 
+      border-color: #ef4444 !important; 
+      color: white !important; 
+    }
   </style>
 </head>
 <body class="relative flex flex-col w-full h-screen selection:bg-cyan-500/30">
 
-  <!-- 背景网格 -->
   <div class="absolute inset-0 bg-grid pointer-events-none z-0"></div>
 
-  <!-- 全局通知组件 -->
-  <div id="notification-toast" class="absolute top-20 left-1/2 transform -translate-x-1/2 w-[90%] max-w-sm bg-cyan-900/95 backdrop-blur-md border border-cyan-500/50 text-white text-sm px-4 py-3 rounded-lg shadow-[0_0_30px_rgba(6,182,212,0.4)] z-50 flex items-center justify-center gap-2 transition-all duration-300 opacity-0 -translate-y-4 pointer-events-none">
-    <i class="ph ph-sparkle text-cyan-300 text-lg"></i>
+  <!-- 顶部全局通知 -->
+  <div id="notification-toast" class="absolute top-24 left-1/2 transform -translate-x-1/2 w-[90%] max-w-sm bg-cyan-900/95 backdrop-blur-md border border-cyan-500/50 text-white text-sm px-4 py-3 rounded-xl shadow-[0_0_40px_rgba(6,182,212,0.5)] z-[100] flex items-center justify-center gap-2 transition-all duration-300 opacity-0 -translate-y-4 pointer-events-none">
+    <i class="ph ph-sparkle text-cyan-300 text-xl"></i>
     <span id="toast-msg" class="font-mono font-bold tracking-wider">通知内容</span>
   </div>
 
-  <!-- 顶部秒表栏 -->
-  <div class="h-[60px] shrink-0 w-full border-b border-slate-800 bg-[#0a0f1c]/90 backdrop-blur-md flex items-center justify-between px-4 z-20 shadow-md">
-    <div class="flex items-center gap-2 text-cyan-400">
-      <i id="clock-icon" class="ph ph-clock text-lg"></i>
-      <span id="timer-display" class="font-mono font-bold text-xl tracking-widest text-slate-500">00:00</span>
-    </div>
-    <div class="flex items-center gap-2">
-      <button id="btn-toggle-timer" class="flex items-center gap-1.5 px-4 py-1.5 rounded border text-[11px] font-mono tracking-widest uppercase transition-all shadow-sm active:scale-95 bg-green-500/10 border-green-500/50 text-green-400">
-        <i id="timer-state-icon" class="ph ph-play text-sm"></i> <span id="timer-state-text">START</span>
-      </button>
-      <button id="btn-reset-timer" class="p-1.5 rounded border border-slate-700 bg-slate-800 text-slate-400 hover:text-red-400 transition-colors active:scale-95">
-        <i class="ph ph-arrow-counter-clockwise text-sm"></i>
-      </button>
+  <!-- 顶部秒表栏 (适配刘海屏) -->
+  <div class="pt-safe shrink-0 w-full border-b border-slate-800 bg-[#0a0f1c]/90 backdrop-blur-md z-20 shadow-md">
+    <div class="flex items-center justify-between px-4 h-[60px]">
+      <div class="flex items-center gap-2 text-cyan-400">
+        <i id="clock-icon" class="ph ph-clock text-xl"></i>
+        <span id="timer-display" class="font-mono font-black text-2xl tracking-widest text-slate-500 drop-shadow-md">00:00</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="btn-toggle-timer" class="flex items-center gap-1.5 px-4 py-2 rounded-lg border text-xs font-mono tracking-widest uppercase transition-all shadow-sm active:scale-95 bg-green-500/10 border-green-500/50 text-green-400">
+          <i id="timer-state-icon" class="ph-fill ph-play text-sm"></i> <span id="timer-state-text">START</span>
+        </button>
+        <button id="btn-reset-timer" class="p-2 rounded-lg border border-slate-700 bg-slate-800 text-slate-400 hover:text-red-400 transition-colors active:scale-95">
+          <i class="ph ph-arrow-counter-clockwise text-base"></i>
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- 核心内容区 (动态切换容器) -->
-  <div id="main-content" class="flex-1 overflow-y-auto relative z-10">
-    <!-- 各个视图将由 JS 动态注入到这里 -->
+  <!-- 核心内容区 -->
+  <div id="main-content" class="flex-1 overflow-y-auto relative z-10 flex flex-col w-full h-full">
+    <!-- 初始化加载界面 -->
+    <div class="flex flex-col items-center justify-center h-full text-slate-500 w-full">
+      <i class="ph ph-spinner-gap animate-spin text-5xl mb-4 text-cyan-400"></i>
+      <p class="font-mono text-sm tracking-widest">CONNECTING TO DATABASE...</p>
+    </div>
   </div>
 
   <!-- 底部导航栏 -->
-  <div class="h-[70px] shrink-0 w-full bg-[#0a0f1c]/95 backdrop-blur-xl border-t border-slate-800 flex items-center justify-between px-1 z-30 pb-safe">
-    <button onclick="switchTab('stage1')" id="nav-stage1" class="nav-btn flex-1 flex flex-col items-center justify-center h-full transition-all text-cyan-400">
-      <i class="ph-fill ph-lightning text-xl mb-1"></i>
-      <span class="text-[9px] font-bold tracking-widest">一阶生存</span>
+  <div class="h-[75px] shrink-0 w-full bg-[#0a0f1c]/98 backdrop-blur-xl border-t border-slate-800 flex items-center justify-between px-2 z-30 pb-safe">
+    <button onclick="switchTab('stage1')" id="nav-stage1" class="nav-btn flex-1 flex flex-col items-center justify-center h-full transition-all text-cyan-400 pointer-events-none opacity-50">
+      <i class="ph-fill ph-lightning text-2xl mb-1"></i><span class="text-[10px] font-bold tracking-wider">一阶生存</span>
     </button>
-    <button onclick="switchTab('stage2')" id="nav-stage2" class="nav-btn flex-1 flex flex-col items-center justify-center h-full transition-all text-slate-600">
-      <i class="ph-fill ph-radio text-xl mb-1"></i>
-      <span class="text-[9px] font-bold tracking-widest">二阶雷达</span>
+    <button onclick="switchTab('stage2')" id="nav-stage2" class="nav-btn flex-1 flex flex-col items-center justify-center h-full transition-all text-slate-600 pointer-events-none opacity-50">
+      <i class="ph-fill ph-radio text-2xl mb-1"></i><span class="text-[10px] font-bold tracking-wider">二阶雷达</span>
     </button>
-    <button onclick="switchTab('stage3')" id="nav-stage3" class="nav-btn flex-1 flex flex-col items-center justify-center h-full transition-all text-slate-600">
-      <i class="ph-fill ph-shield-check text-xl mb-1"></i>
-      <span class="text-[9px] font-bold tracking-widest">三阶日记</span>
+    <button onclick="switchTab('stage3')" id="nav-stage3" class="nav-btn flex-1 flex flex-col items-center justify-center h-full transition-all text-slate-600 pointer-events-none opacity-50">
+      <i class="ph-fill ph-shield-check text-2xl mb-1"></i><span class="text-[10px] font-bold tracking-wider">三阶日记</span>
     </button>
-    <button onclick="switchTab('dev')" id="nav-dev" class="nav-btn flex-1 flex flex-col items-center justify-center h-full transition-all text-slate-600">
-      <i class="ph-fill ph-code text-xl mb-1"></i>
-      <span class="text-[9px] font-bold tracking-widest">代码特区</span>
+    <button onclick="switchTab('dev')" id="nav-dev" class="nav-btn flex-1 flex flex-col items-center justify-center h-full transition-all text-slate-600 pointer-events-none opacity-50">
+      <i class="ph-fill ph-code text-2xl mb-1"></i><span class="text-[10px] font-bold tracking-wider">代码特区</span>
     </button>
   </div>
 
 <script>
-// ================= 原生 JS 引擎逻辑 =================
-
-// 1. 模拟底层“破冰包”数据库 (内置 80 句高频)
-// 实际应用中，这里将被 fetch('database.json') 替代
-const DB = {
-  survival: {
-    group1: [
-      { id: 1, en: 'I want this.', zh: '我想要这个。', sound: '爱 万特 迪斯', words: [{w:'I', m:'我'}, {w:'want', m:'想要'}, {w:'this', m:'这个'}] },
-      { id: 2, en: 'How much is it?', zh: '这多少钱？', sound: '好 吗起 意思 伊特？', words: [{w:'How', m:'多少'}, {w:'much', m:'大量'}, {w:'is', m:'是'}, {w:'it', m:'它'}] },
-      { id: 3, en: 'Excuse me.', zh: '打扰一下。', sound: '易克斯丘兹 密', words: [{w:'Excuse', m:'原谅'}, {w:'me', m:'我'}] },
-      { id: 4, en: 'Can you help me?', zh: '你能帮我吗？', sound: '坎 尤 嗨尔普 密？', words: [{w:'Can', m:'能'}, {w:'you', m:'你'}, {w:'help', m:'帮助'}, {w:'me', m:'我'}] },
-      { id: 5, en: 'Where is the toilet?', zh: '厕所在哪里？', sound: '喂儿 意思 惹 托伊勒特？', words: [{w:'Where', m:'哪里'}, {w:'is', m:'是'}, {w:'the', m:'特指'}, {w:'toilet', m:'厕所'}] },
-      { id: 6, en: 'I do not understand.', zh: '我不懂。', sound: '爱 动特 安德斯单德', words: [{w:'I', m:'我'}, {w:'do', m:'助词'}, {w:'not', m:'不'}, {w:'understand', m:'理解'}] },
-      { id: 7, en: 'Speak slowly, please.', zh: '请说慢点。', sound: '斯皮克 斯楼里 普利兹', words: [{w:'Speak', m:'说'}, {w:'slowly', m:'慢地'}, {w:'please', m:'请'}] },
-      { id: 8, en: 'I am sorry.', zh: '我很抱歉。', sound: '爱 艾姆 搜瑞', words: [{w:'I', m:'我'}, {w:'am', m:'是'}, {w:'sorry', m:'抱歉的'}] },
-      { id: 9, en: 'Thank you very much.', zh: '非常感谢。', sound: '三克 尤 威瑞 吗起', words: [{w:'Thank', m:'感谢'}, {w:'you', m:'你'}, {w:'very', m:'非常'}, {w:'much', m:'多'}] },
-      { id: 10, en: 'What time is it?', zh: '几点了？', sound: '沃特 泰姆 意思 伊特？', words: [{w:'What', m:'什么'}, {w:'time', m:'时间'}, {w:'is', m:'是'}, {w:'it', m:'它'}] }
-    ],
-    group2: [
-      { id: 11, en: 'Nice to meet you.', zh: '很高兴见到你。', sound: '耐斯 图 密特 尤', words: [{w:'Nice', m:'好的'}, {w:'to', m:'去'}, {w:'meet', m:'遇见'}, {w:'you', m:'你'}] },
-      { id: 12, en: 'How are you doing?', zh: '你过得怎么样？', sound: '好 阿 尤 都影？', words: [{w:'How', m:'如何'}, {w:'are', m:'是'}, {w:'you', m:'你'}, {w:'doing', m:'做'}] },
-      { id: 13, en: 'I think so.', zh: '我认为是这样。', sound: '爱 씽克 搜', words: [{w:'I', m:'我'}, {w:'think', m:'认为'}, {w:'so', m:'如此'}] },
-      { id: 14, en: 'Are you sure?', zh: '你确定吗？', sound: '阿 尤 硕尔？', words: [{w:'Are', m:'是'}, {w:'you', m:'你'}, {w:'sure', m:'确定的'}] },
-      { id: 15, en: 'Of course.', zh: '当然。', sound: '欧夫 靠斯', words: [{w:'Of', m:'的'}, {w:'course', m:'过程'}] }
-    ],
-    group3: [
-      { id: 16, en: 'Where is the train station?', zh: '火车站怎么走？', sound: '喂儿 意思 惹 吹恩 斯得神？', words: [{w:'Where', m:'哪里'}, {w:'train', m:'火车'}, {w:'station', m:'车站'}] },
-      { id: 17, en: 'One ticket, please.', zh: '请给我一张票。', sound: '万 踢克特 普利兹', words: [{w:'One', m:'一'}, {w:'ticket', m:'票'}] },
-      { id: 18, en: 'Keep going straight.', zh: '一直往前走。', sound: '基普 够影 斯锤特', words: [{w:'Keep', m:'保持'}, {w:'straight', m:'直着'}] },
-      { id: 19, en: 'Turn left here.', zh: '在这里左转。', sound: '特恩 莱夫特 嘿儿', words: [{w:'Turn', m:'转弯'}, {w:'left', m:'左'}] },
-      { id: 20, en: 'Can I pay by card?', zh: '可以刷卡吗？', sound: '坎 爱 佩 白 卡的？', words: [{w:'pay', m:'支付'}, {w:'card', m:'卡'}] }
-    ]
-  },
-  dev: {
-    group1: [
-      { id: 101, en: 'Failed to fetch data.', zh: '获取数据失败。', sound: '费欧德 图 费吃 得他', words: [{w:'Failed', m:'失败'}, {w:'fetch', m:'获取'}, {w:'data', m:'数据'}] },
-      { id: 102, en: 'Invalid syntax error.', zh: '无效语法错误。', sound: '因瓦利德 辛泰克斯 艾若', words: [{w:'Invalid', m:'无效的'}, {w:'syntax', m:'语法'}, {w:'error', m:'错误'}] },
-      { id: 103, en: 'Out of memory.', zh: '内存溢出。', sound: '奥特 欧夫 迈莫瑞', words: [{w:'Out', m:'出'}, {w:'memory', m:'内存'}] },
-      { id: 104, en: 'Merge conflict found.', zh: '发现合并冲突。', sound: '默吉 康弗利克特 方德', words: [{w:'Merge', m:'合并'}, {w:'conflict', m:'冲突'}] },
-      { id: 105, en: 'Cannot read property.', zh: '无法读取属性。', sound: '坎闹特 瑞的 普绕破提', words: [{w:'Cannot', m:'不能'}, {w:'read', m:'读取'}, {w:'property', m:'属性'}] }
-    ]
-  }
-};
+// ================= 核心应用状态与引擎 =================
+let DB = null; 
 
 const CONTEXT_TEMPLATES = [
   { template: "Customer: [TARGET_1]. Can I pay by card? \nCashier: Of course.", zh: "顾客：[目标词块1]。我可以刷卡吗？\n收银员：当然。" },
   { template: "Attention, the elevator is currently [TARGET_2]. Use stairs.", zh: "注意，电梯目前[目标词块2]。请走楼梯。" },
   { template: "I was walking and suddenly realized [TARGET_3]. A kind person helped me.", zh: "我在散步，突然意识到[目标词块3]。一个好心人帮助了我。" },
   { template: "Receptionist: Good evening! Do you have a reservation? \nGuest: [TARGET_4].", zh: "前台：晚上好！您有预定吗？\n客人：[目标词块4]。" },
-  { template: "It's an emergency! Please [TARGET_5] immediately. There has been an accident.", zh: "紧急情况！请立刻[目标词块5]。发生了一起事故。" }
+  { template: "It's an emergency! Please [TARGET_5] immediately.", zh: "紧急情况！请立刻[目标词块5]。" }
 ];
 
-
-// 2. 全局应用状态
 const AppState = {
   currentTab: 'stage1',
-  activeDeck: [],
-  totalCards: 0,
-  learnedCards: 0,
-  deckTitle: '',
-  todayWords: [], // 用于二阶强绑定
-  diaries: [], // 三阶存储
-  
-  // 计时器
-  timeElapsed: 0,
-  timerInterval: null,
-  isTimerRunning: false,
-  
-  // 语音合成
-  synth: window.speechSynthesis,
-  isSpeaking: false,
-  
-  // 语音识别
-  recognition: null,
-  isListening: false
+  activeDeck: [], totalCards: 0, learnedCards: 0, deckTitle: '',
+  todayWords: [], diaries: [],
+  timeElapsed: 0, timerInterval: null, isTimerRunning: false,
+  synth: window.speechSynthesis, recognition: null, isListening: false
 };
 
-// 初始化语音识别引擎 (仅当支持时)
+// 初始化麦克风
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 if (SpeechRecognition) {
   AppState.recognition = new SpeechRecognition();
@@ -168,9 +123,40 @@ if (SpeechRecognition) {
   AppState.recognition.maxAlternatives = 1;
 }
 
-// 3. 核心工具函数
+// -------------------- 数据加载 (AJAX) --------------------
+window.onload = async () => {
+  if (AppState.synth) {
+    AppState.synth.getVoices();
+    AppState.synth.onvoiceschanged = () => { AppState.synth.getVoices(); };
+  }
 
-// 提示吐司
+  try {
+    const res = await fetch('./database.json');
+    if (!res.ok) throw new Error('Network error');
+    DB = await res.json();
+    
+    // 解除按钮锁定
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.classList.remove('pointer-events-none', 'opacity-50');
+    });
+    
+    switchTab('stage1');
+  } catch (err) {
+    document.getElementById('main-content').innerHTML = `
+      <div class="flex flex-col items-center justify-center h-full px-6 text-center text-red-400 w-full">
+        <i class="ph ph-warning text-6xl mb-4"></i>
+        <h2 class="text-2xl font-bold mb-2">数据加载失败</h2>
+        <p class="text-sm text-slate-400 mt-4 leading-relaxed">
+          无法读取 <b>database.json</b>。<br><br>
+          请确保两个文件上传到了同一个 GitHub 仓库。
+        </p>
+      </div>
+    `;
+  }
+};
+
+
+// -------------------- 交互工具 --------------------
 function showToast(msg) {
   const toast = document.getElementById('notification-toast');
   document.getElementById('toast-msg').innerText = msg;
@@ -191,30 +177,26 @@ document.getElementById('btn-toggle-timer').addEventListener('click', () => {
   const btnToggle = document.getElementById('btn-toggle-timer');
 
   if (AppState.isTimerRunning) {
-    // 暂停
     clearInterval(AppState.timerInterval);
     AppState.isTimerRunning = false;
     btnText.innerText = 'START';
-    btnIcon.className = 'ph ph-play text-sm';
+    btnIcon.className = 'ph-fill ph-play text-sm';
     clockIcon.classList.remove('animate-pulse');
     timeDisplay.classList.remove('text-cyan-400');
     timeDisplay.classList.add('text-slate-500');
-    
-    btnToggle.className = 'flex items-center gap-1.5 px-4 py-1.5 rounded border text-[11px] font-mono tracking-widest uppercase transition-all shadow-sm active:scale-95 bg-green-500/10 border-green-500/50 text-green-400';
+    btnToggle.className = 'flex items-center gap-1.5 px-4 py-2 rounded-lg border text-xs font-mono tracking-widest uppercase transition-all shadow-sm active:scale-95 bg-green-500/10 border-green-500/50 text-green-400';
   } else {
-    // 开始
     AppState.timerInterval = setInterval(() => {
       AppState.timeElapsed++;
       timeDisplay.innerText = formatTime(AppState.timeElapsed);
     }, 1000);
     AppState.isTimerRunning = true;
     btnText.innerText = 'PAUSE';
-    btnIcon.className = 'ph ph-pause text-sm';
+    btnIcon.className = 'ph-fill ph-pause text-sm';
     clockIcon.classList.add('animate-pulse');
     timeDisplay.classList.remove('text-slate-500');
     timeDisplay.classList.add('text-cyan-400');
-    
-    btnToggle.className = 'flex items-center gap-1.5 px-4 py-1.5 rounded border text-[11px] font-mono tracking-widest uppercase transition-all shadow-sm active:scale-95 bg-orange-500/10 border-orange-500/50 text-orange-400';
+    btnToggle.className = 'flex items-center gap-1.5 px-4 py-2 rounded-lg border text-xs font-mono tracking-widest uppercase transition-all shadow-sm active:scale-95 bg-orange-500/10 border-orange-500/50 text-orange-400';
   }
 });
 
@@ -224,11 +206,11 @@ document.getElementById('btn-reset-timer').addEventListener('click', () => {
   AppState.timeElapsed = 0;
   document.getElementById('timer-display').innerText = '00:00';
   document.getElementById('timer-state-text').innerText = 'START';
-  document.getElementById('timer-state-icon').className = 'ph ph-play text-sm';
+  document.getElementById('timer-state-icon').className = 'ph-fill ph-play text-sm';
   document.getElementById('clock-icon').classList.remove('animate-pulse');
   document.getElementById('timer-display').classList.remove('text-cyan-400');
   document.getElementById('timer-display').classList.add('text-slate-500');
-  document.getElementById('btn-toggle-timer').className = 'flex items-center gap-1.5 px-4 py-1.5 rounded border text-[11px] font-mono tracking-widest uppercase transition-all shadow-sm active:scale-95 bg-green-500/10 border-green-500/50 text-green-400';
+  document.getElementById('btn-toggle-timer').className = 'flex items-center gap-1.5 px-4 py-2 rounded-lg border text-xs font-mono tracking-widest uppercase transition-all shadow-sm active:scale-95 bg-green-500/10 border-green-500/50 text-green-400';
   showToast('⏱️ 计时器归零。');
 });
 
@@ -238,26 +220,27 @@ function formatTime(secs) {
   return `${m}:${s}`;
 }
 
-// 语音播放引擎 (强制中断麦克风)
+// -------------------- 电脑发音与麦克风引擎 --------------------
 window.playAudio = function(text, event) {
   if (event) { event.stopPropagation(); event.preventDefault(); }
   if (!AppState.synth) { showToast("⚠️ 浏览器不支持语音"); return; }
   
-  // 中断麦克风
   if (AppState.isListening && AppState.recognition) {
-    AppState.recognition.stop();
+    try { AppState.recognition.abort(); } catch(e){}
     AppState.isListening = false;
     updateMicUI(false);
   }
   
-  // 停止之前播放的声音
   AppState.synth.cancel();
   
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'en-US';
-  utterance.rate = 0.65; // 慢速
+  utterance.rate = 0.65;
   
-  // 喇叭动画控制 (如果有对应的图标)
+  const voices = AppState.synth.getVoices();
+  const enVoice = voices.find(v => v.lang === 'en-US') || voices.find(v => v.lang.startsWith('en-'));
+  if (enVoice) utterance.voice = enVoice;
+  
   const volIcon = event ? event.currentTarget.querySelector('.ph-speaker-high') : null;
   if(volIcon) volIcon.classList.add('animate-pulse', 'text-cyan-400');
   
@@ -268,97 +251,128 @@ window.playAudio = function(text, event) {
 };
 
 
-// 麦克风跟读引擎
 window.startRecognition = function(targetText, event) {
   if (event) { event.stopPropagation(); event.preventDefault(); }
-  
-  if (!AppState.recognition) {
-    showToast("⚠️ 当前环境不支持麦克风评测 (建议使用 Safari/Chrome)");
-    return;
+  if (!AppState.recognition) { showToast("⚠️ 当前环境不支持麦克风"); return; }
+
+  // 防抖与开关逻辑
+  if (AppState.isListening) {
+      try { AppState.recognition.abort(); } catch (e) {}
+      updateMicUI(false);
+      return; 
   }
 
-  // 掐断播放的声音
   AppState.synth.cancel();
-  
   updateMicUI(true);
   
   try {
     AppState.recognition.start();
   } catch(e) {
     updateMicUI(false);
-    showToast("⚠️ 启动失败，请重试");
+    showToast("⚠️ 麦克风正在重置，请稍后再试");
+    return;
   }
 
   AppState.recognition.onresult = (e) => {
     updateMicUI(false);
     const transcript = e.results[0][0].transcript.toLowerCase();
-    const target = targetText.toLowerCase().replace(/[^a-z\s]/g, "");
-    const spoken = transcript.replace(/[^a-z\s]/g, "");
     
-    // 粗略匹配
-    if (target.includes(spoken) || spoken.includes(target)) {
-      showToast('🌟 完美发音！进入下一张');
-      handleSwipe('right');
+    // 提取纯净的单词数组用于匹配
+    const targetWords = targetText.toLowerCase().replace(/[^a-z\s]/g, "").split(' ').filter(w=>w);
+    const spokenWords = transcript.replace(/[^a-z\s]/g, "").split(' ').filter(w=>w);
+    
+    // 【核心修复：提高灵敏度和容错率】
+    // 只要读出的词命中目标句子的 50% 以上，就算过关
+    let matchCount = 0;
+    targetWords.forEach(w => {
+       if (spokenWords.includes(w)) matchCount++;
+    });
+    
+    const accuracy = matchCount / targetWords.length;
+    const targetStr = targetText.toLowerCase().replace(/[^a-z\s]/g, "");
+    const spokenStr = transcript.replace(/[^a-z\s]/g, "");
+
+    // 容错判断：命中率>50%，或者包含了整句，或者被包含
+    if (accuracy >= 0.5 || targetStr.includes(spokenStr) || spokenStr.includes(targetStr)) {
+      showToast('🌟 完美发音！肌肉记忆已刻印');
+      document.getElementById('card-container').classList.add('border-green-500', 'shadow-[0_0_50px_rgba(34,197,94,0.4)]');
+      setTimeout(() => handleSwipe('right'), 1000); // 延迟自动滑走，让你看清绿光
     } else {
-      showToast(`❌ 听到: "${transcript}"。请点单词重听`);
-      document.getElementById('card-container').classList.add('border-red-500', 'shadow-[0_0_30px_rgba(239,68,68,0.3)]');
+      showToast(`❌ 听到: "${transcript}"。再试一次！`);
+      document.getElementById('card-container').classList.add('border-red-500', 'shadow-[0_0_50px_rgba(239,68,68,0.4)]');
+      setTimeout(() => {
+          document.getElementById('card-container').classList.remove('border-red-500', 'shadow-[0_0_50px_rgba(239,68,68,0.4)]');
+      }, 1000);
     }
   };
 
   AppState.recognition.onerror = (e) => {
     updateMicUI(false);
-    if(e.error === 'not-allowed') showToast("⚠️ 请授予麦克风权限");
-    else if (e.error !== 'no-speech') showToast("⚠️ 未识别到声音");
+    if(e.error === 'not-allowed') showToast("⚠️ 请在手机设置中允许 Safari/微信使用麦克风");
+    else if (e.error !== 'no-speech') showToast("⚠️ 没听清，请大声点");
   };
+
+  AppState.recognition.onend = () => { updateMicUI(false); }
 };
 
+// 极高对比度的麦克风 UI 更新
 function updateMicUI(isListening) {
   AppState.isListening = isListening;
   const micBtn = document.getElementById('mic-btn');
   const micText = document.getElementById('mic-text');
+  const micOverlay = document.getElementById('mic-overlay');
+  
   if (!micBtn) return;
   
   if (isListening) {
-    micBtn.className = 'w-14 h-14 rounded-full flex items-center justify-center transition-all animate-pulse-red';
-    micText.innerText = 'LISTENING...';
-    micText.classList.replace('text-slate-500', 'text-red-400');
+    micBtn.classList.add('mic-active');
+    micText.innerHTML = '<span class="text-red-400 font-bold text-[11px]">🔴 正在聆听... 请大声朗读</span>';
+    if(micOverlay) micOverlay.classList.remove('hidden');
   } else {
-    micBtn.className = 'w-14 h-14 rounded-full flex items-center justify-center transition-all bg-slate-800 border border-slate-600 hover:border-cyan-500 text-slate-400 shadow-lg';
-    micText.innerText = 'SWIPE OR SPEAK';
-    micText.classList.replace('text-red-400', 'text-slate-500');
+    micBtn.classList.remove('mic-active');
+    micBtn.className = 'w-16 h-16 rounded-full flex items-center justify-center transition-all bg-slate-800 border-2 border-slate-600 shadow-xl text-slate-400 active:scale-95 z-20 relative';
+    micText.innerHTML = 'TAP TO SPEAK';
+    if(micOverlay) micOverlay.classList.add('hidden');
   }
 }
 
-
-// 4. 业务逻辑与渲染
-
-// 根据日期生成计划
+// -------------------- 业务渲染引擎 --------------------
 function loadDailyPlan(tab) {
+  if (!DB) return;
   const day = new Date().getDay();
-  let db = tab === 'dev' ? DB.dev : DB.survival;
+  let dbNode = tab === 'dev' ? DB.dev : DB.survival;
   let pool = [];
   
-  if(day === 1 || day === 2) { pool = db.group1; AppState.deckTitle = tab==='dev'?'代码一阶':'生存一阶'; }
-  else if(day === 3 || day === 4) { pool = db.group2 || db.group1; AppState.deckTitle = tab==='dev'?'代码二阶':'生存二阶'; }
-  else if(day === 5 || day === 6) { pool = db.group3 || db.group1; AppState.deckTitle = tab==='dev'?'代码三阶':'生存三阶'; }
-  else { 
-    pool = [...(db.group1||[]), ...(db.group2||[]), ...(db.group3||[])]; 
-    AppState.deckTitle = '周末总测验'; 
+  // 收集所有可用的 group 组合周末大考
+  let allGroups = [];
+  for (let key in dbNode) {
+     if (Array.isArray(dbNode[key])) allGroups = allGroups.concat(dbNode[key]);
+  }
+
+  if(day === 1 || day === 2) { 
+    pool = dbNode.group1 || allGroups.slice(0, 10); 
+    AppState.deckTitle = tab==='dev'?'代码一阶':'生存一阶'; 
+  } else if(day === 3 || day === 4) { 
+    pool = dbNode.group2 || dbNode.group1 || allGroups.slice(10, 20); 
+    AppState.deckTitle = tab==='dev'?'代码二阶':'生存二阶'; 
+  } else if(day === 5 || day === 6) { 
+    pool = dbNode.group3 || dbNode.group1 || allGroups.slice(20, 30); 
+    AppState.deckTitle = tab==='dev'?'代码三阶':'生存三阶'; 
+  } else { 
+    pool = allGroups; 
+    AppState.deckTitle = `周末总测验: ${pool.length}句`; 
   }
   
-  // 随机打乱并加载
   AppState.activeDeck = [...pool].sort(() => Math.random() - 0.5);
   AppState.totalCards = AppState.activeDeck.length;
   AppState.learnedCards = 0;
-  
-  if (tab === 'stage1') AppState.todayWords = pool; // 留给二阶用
+  if (tab === 'stage1') AppState.todayWords = pool; 
 }
 
-// 导航切换
 window.switchTab = function(tabName) {
+  if (!DB) return; 
   AppState.currentTab = tabName;
   
-  // UI 样式切换
   ['stage1', 'stage2', 'stage3', 'dev'].forEach(id => {
     const el = document.getElementById('nav-'+id);
     if(id === tabName) {
@@ -366,12 +380,11 @@ window.switchTab = function(tabName) {
       el.className = `nav-btn flex-1 flex flex-col items-center justify-center h-full transition-all ${colorClass}`;
       el.querySelector('i').classList.add('animate-pulse');
     } else {
-      el.className = `nav-btn flex-1 flex flex-col items-center justify-center h-full transition-all text-slate-600`;
+      el.className = `nav-btn flex-1 flex flex-col items-center justify-center h-full transition-all text-slate-500`;
       el.querySelector('i').classList.remove('animate-pulse');
     }
   });
 
-  // 渲染对应视图
   if(tabName === 'stage1' || tabName === 'dev') {
     loadDailyPlan(tabName);
     renderSwipeView();
@@ -382,98 +395,98 @@ window.switchTab = function(tabName) {
   }
 };
 
-// ================= 视图渲染器 =================
-
 function renderSwipeView() {
   const container = document.getElementById('main-content');
   if (AppState.activeDeck.length === 0) {
     container.innerHTML = `
-      <div class="flex flex-col items-center justify-center w-full h-full px-6 text-center animate-in fade-in zoom-in duration-300">
-        <div class="w-24 h-24 rounded-full bg-green-500/20 border-2 border-green-500 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(34,197,94,0.3)]">
-          <i class="ph ph-check-circle text-5xl text-green-400"></i>
+      <div class="flex flex-col items-center justify-center w-full h-full px-6 text-center animate-in fade-in zoom-in duration-300 flex-1">
+        <div class="w-28 h-28 rounded-full bg-green-500/20 border-4 border-green-500 flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(34,197,94,0.4)]">
+          <i class="ph ph-check-circle text-6xl text-green-400"></i>
         </div>
-        <h2 class="text-2xl font-black text-white mb-2 tracking-widest">神经回路建立完毕</h2>
-        <p class="text-slate-400 text-sm font-mono mb-8">掌握: ${AppState.totalCards} / ${AppState.totalCards}</p>
-        <div class="text-xs text-slate-500 bg-slate-800 p-4 rounded-lg border border-slate-700">请前往下一步进行实战测试。</div>
+        <h2 class="text-3xl font-black text-white mb-3 tracking-widest drop-shadow-md">神经回路建立</h2>
+        <p class="text-slate-400 text-base font-mono mb-10">掌握进度: ${AppState.totalCards} / ${AppState.totalCards}</p>
+        <div class="text-sm text-slate-400 bg-slate-800/80 p-5 rounded-2xl border border-slate-700 shadow-inner">请前往下方菜单进行下一步实战。</div>
       </div>
     `;
     return;
   }
 
   const card = AppState.activeDeck[0];
-  const percent = (AppState.learnedCards / AppState.totalCards) * 100;
+  const percent = AppState.totalCards > 0 ? (AppState.learnedCards / AppState.totalCards) * 100 : 0;
   
-  // 生成单词拆解 HTML
-  const wordsHtml = card.words.map(w => `
-    <button onclick="playAudio('${w.w}', event)" class="flex flex-col items-center bg-[#0a0f1c] hover:bg-slate-800 px-2 py-1.5 rounded-lg shadow-sm border border-slate-700/80 transition-all active:scale-95">
-      <span class="text-[13px] font-bold text-purple-300 font-mono">${w.w}</span>
-      <span class="text-[10px] text-slate-500 mt-0.5">${w.m}</span>
+  const wordsHtml = card.words && card.words.length > 0 ? card.words.map(w => `
+    <button onclick="playAudio('${w.w.replace(/'/g, "\\'")}', event)" class="flex flex-col items-center justify-center bg-[#0a0f1c] hover:bg-slate-800 px-3 py-2 rounded-xl shadow-md border border-slate-700 transition-transform active:scale-90">
+      <span class="text-[14px] font-bold text-purple-300 font-mono tracking-wider">${w.w}</span>
+      <span class="text-[10px] text-slate-500 mt-1">${w.m}</span>
     </button>
-  `).join('');
+  `).join('') : '';
 
   container.innerHTML = `
-    <div class="flex flex-col items-center w-full h-full px-4 pt-4 pb-4 relative overflow-hidden">
+    <div class="flex flex-col items-center w-full h-full px-4 pt-2 pb-6 relative overflow-hidden flex-1">
       
-      <!-- 进度条 -->
-      <div class="w-full mb-3 text-center">
-        <h2 class="text-sm font-black text-cyan-400 bg-slate-900/80 inline-block px-4 py-1.5 rounded-full border border-cyan-500/30">${AppState.deckTitle}</h2>
-        <div class="w-full max-w-[240px] h-1.5 bg-slate-800 rounded-full mx-auto mt-4 overflow-hidden">
-          <div class="h-full bg-cyan-500 transition-all duration-300" style="width: ${percent}%"></div>
+      <!-- 进度指示器 -->
+      <div class="w-full mb-3 text-center z-10">
+        <h2 class="text-[13px] font-black text-cyan-400 bg-slate-900/80 inline-block px-5 py-2 rounded-full border border-cyan-500/30 shadow-lg tracking-widest">${AppState.deckTitle}</h2>
+        <div class="w-full max-w-[280px] h-2 bg-slate-800 rounded-full mx-auto mt-4 overflow-hidden shadow-inner">
+          <div class="h-full bg-gradient-to-r from-cyan-600 to-cyan-400 transition-all duration-300 rounded-full" style="width: ${percent}%"></div>
         </div>
-        <p class="text-[10px] text-slate-500 font-mono mt-2 tracking-widest">已掌握: ${AppState.learnedCards} | 剩余: ${AppState.activeDeck.length}</p>
+        <p class="text-[10px] text-slate-500 font-mono mt-2 tracking-widest uppercase">已掌握: ${AppState.learnedCards} / 剩余: ${AppState.activeDeck.length}</p>
       </div>
 
-      <!-- 核心卡片容器 -->
-      <div class="relative w-full max-w-sm flex-1 flex items-center justify-center perspective-1000 mt-2">
-        ${AppState.activeDeck.length > 1 ? '<div class="absolute w-full h-[85%] bg-slate-800/80 rounded-3xl border border-slate-700/50 transform scale-95 translate-y-4 z-0"></div>' : ''}
+      <!-- 主卡片区 -->
+      <div class="relative w-full max-w-sm flex-1 flex items-center justify-center perspective-1000 mt-2 mb-4">
+        ${AppState.activeDeck.length > 1 ? '<div class="absolute w-full h-[88%] bg-slate-800/80 rounded-[32px] border border-slate-700/50 transform scale-[0.93] translate-y-6 z-0 shadow-lg"></div>' : ''}
         
-        <div id="card-container" class="absolute w-full h-[95%] max-h-[520px] bg-[#0f172a] rounded-3xl border-2 border-slate-700 shadow-2xl flex flex-col items-center justify-between p-5 z-10 card-transition" onclick="playAudio('${card.en.replace(/'/g, "\\'")}', event)">
+        <div id="card-container" class="absolute w-full h-[95%] max-h-[580px] bg-[#0f172a] rounded-[32px] border-2 border-slate-700 shadow-2xl flex flex-col items-center justify-between p-6 z-10 card-transition" onclick="playAudio('${card.en.replace(/'/g, "\\'")}', event)">
           
-          <div class="w-full flex justify-between items-center text-slate-500 mb-1">
-            <span class="text-[10px] font-mono tracking-widest bg-slate-800 px-2 py-1 rounded border border-slate-700">ID: #${card.id}</span>
-            <button class="p-2 rounded-full bg-slate-800"><i class="ph ph-speaker-high text-xl"></i></button>
+          <!-- 录音提示遮罩 (默认隐藏) -->
+          <div id="mic-overlay" class="absolute inset-0 bg-black/60 rounded-[30px] z-10 hidden pointer-events-none backdrop-blur-sm transition-all"></div>
+
+          <!-- 卡片顶部 -->
+          <div class="w-full flex justify-between items-center text-slate-500 mb-2 z-20">
+            <span class="text-[11px] font-mono tracking-widest bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700 shadow-inner">ID: #${card.id}</span>
+            <button class="p-2.5 rounded-full bg-slate-800 shadow-md border border-slate-700"><i class="ph ph-speaker-high text-2xl"></i></button>
           </div>
 
-          <div class="flex-1 flex flex-col items-center justify-center w-full text-center space-y-4 py-2">
-            <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight drop-shadow-md px-2">${card.en}</h2>
-            <div class="bg-slate-900/80 px-4 py-2 rounded-xl border border-cyan-500/20 w-[90%]">
-              <p class="text-[10px] text-cyan-600 font-mono uppercase tracking-widest mb-1">发音密码</p>
-              <p class="text-lg font-bold text-cyan-400 tracking-widest">${card.sound}</p>
+          <!-- 内容主体 -->
+          <div class="flex-1 flex flex-col items-center justify-center w-full text-center py-2 z-20 space-y-5">
+            <h2 class="text-4xl sm:text-5xl font-black text-white tracking-tight leading-tight drop-shadow-lg px-2">${card.en}</h2>
+            
+            <div class="bg-slate-900/90 px-5 py-3 rounded-2xl border border-cyan-500/30 w-[95%] shadow-inner">
+              <p class="text-[10px] text-cyan-600 font-mono uppercase tracking-widest mb-1.5">发音密码</p>
+              <p class="text-xl font-bold text-cyan-400 tracking-widest">${card.sound}</p>
             </div>
             
-            <!-- 单词拆解 -->
-            <div class="w-[95%] bg-slate-800/40 rounded-xl p-2.5 border border-slate-700/50 flex flex-wrap justify-center gap-2" onclick="event.stopPropagation()">
+            <div class="w-[100%] bg-slate-800/40 rounded-2xl p-3 border border-slate-700/50 flex flex-wrap justify-center gap-2.5" onclick="event.stopPropagation()">
               ${wordsHtml}
             </div>
 
-            <div class="w-full pt-1">
-              <p class="text-[10px] text-slate-500 mb-1 tracking-widest uppercase">意境</p>
-              <p class="text-xl font-bold text-slate-200">${card.zh}</p>
+            <div class="w-full pt-2">
+              <p class="text-[10px] text-slate-500 mb-1.5 tracking-widest uppercase">整句意境</p>
+              <p class="text-2xl font-bold text-slate-200 tracking-wide">${card.zh}</p>
             </div>
           </div>
 
-          <!-- 麦克风 -->
-          <div class="w-full mt-2 flex flex-col items-center">
-            <button id="mic-btn" onclick="startRecognition('${card.en.replace(/'/g, "\\'")}', event)" class="w-14 h-14 rounded-full flex items-center justify-center transition-all bg-slate-800 border border-slate-600 shadow-lg text-slate-400">
-              <i class="ph-fill ph-microphone text-2xl"></i>
+          <!-- 高对比度麦克风 -->
+          <div class="w-full mt-4 flex flex-col items-center relative z-20">
+            <button id="mic-btn" onclick="startRecognition('${card.en.replace(/'/g, "\\'")}', event)" class="w-16 h-16 rounded-full flex items-center justify-center transition-all bg-slate-800 border-2 border-slate-600 shadow-xl text-slate-400 active:scale-95 z-20 relative">
+              <i class="ph-fill ph-microphone text-3xl"></i>
             </button>
-            <p id="mic-text" class="text-[9px] font-mono mt-2 tracking-widest text-slate-500">SWIPE OR SPEAK</p>
+            <p id="mic-text" class="text-[10px] font-mono mt-3 tracking-widest text-slate-500 uppercase font-bold">TAP TO SPEAK</p>
           </div>
         </div>
       </div>
 
-      <!-- 底部判卷器 -->
-      <div class="w-full max-w-sm flex justify-between items-center mt-4 z-20">
-        <button onclick="window.handleSwipe('left')" class="w-14 h-14 rounded-full bg-slate-900 border-2 border-red-500/50 flex flex-col items-center justify-center text-red-400 active:scale-90 transition-transform">
-          <i class="ph ph-arrow-left text-xl mb-0.5"></i>
-          <span class="text-[8px] font-bold">记不住</span>
+      <!-- 底部判卷器 (放大触控区) -->
+      <div class="w-full max-w-sm flex justify-between items-center z-20 px-2">
+        <button onclick="window.handleSwipe('left')" class="w-16 h-16 rounded-full bg-slate-900 border-2 border-red-500/60 flex flex-col items-center justify-center text-red-400 active:scale-90 transition-transform shadow-[0_0_20px_rgba(239,68,68,0.15)]">
+          <i class="ph ph-arrow-left text-2xl mb-0.5"></i><span class="text-[9px] font-bold tracking-widest">没记住</span>
         </button>
-        <div class="flex flex-col items-center text-slate-600 font-mono text-[9px] uppercase tracking-widest opacity-50">
-          <i class="ph ph-arrows-clockwise text-sm mb-1"></i> Repeat
+        <div class="flex flex-col items-center text-slate-600 font-mono text-[10px] uppercase tracking-widest opacity-60">
+          <i class="ph ph-arrows-clockwise text-base mb-1"></i> Review
         </div>
-        <button onclick="window.handleSwipe('right')" class="w-14 h-14 rounded-full bg-slate-900 border-2 border-green-500/50 flex flex-col items-center justify-center text-green-400 active:scale-90 transition-transform">
-          <i class="ph ph-arrow-right text-xl mb-0.5"></i>
-          <span class="text-[8px] font-bold">已掌握</span>
+        <button onclick="window.handleSwipe('right')" class="w-16 h-16 rounded-full bg-slate-900 border-2 border-green-500/60 flex flex-col items-center justify-center text-green-400 active:scale-90 transition-transform shadow-[0_0_20px_rgba(34,197,94,0.15)]">
+          <i class="ph ph-arrow-right text-2xl mb-0.5"></i><span class="text-[9px] font-bold tracking-widest">已掌握</span>
         </button>
       </div>
     </div>
@@ -485,19 +498,21 @@ window.handleSwipe = function(direction) {
   const cardEl = document.getElementById('card-container');
   if(!cardEl) return;
 
-  // 添加飞出动画
   cardEl.classList.add(direction === 'left' ? 'swipe-left' : 'swipe-right');
-
   const currentCard = AppState.activeDeck[0];
 
   setTimeout(() => {
     AppState.activeDeck.shift();
-
     if (direction === 'left') {
       const insertIndex = Math.max(1, Math.floor(AppState.activeDeck.length / 2));
       AppState.activeDeck.splice(insertIndex, 0, currentCard);
     } else {
       AppState.learnedCards++;
+    }
+    
+    if (AppState.isListening) {
+        try { AppState.recognition.abort(); } catch(e){}
+        AppState.isListening = false;
     }
     renderSwipeView();
   }, 300);
@@ -506,7 +521,7 @@ window.handleSwipe = function(direction) {
 function renderStage2View() {
   const container = document.getElementById('main-content');
   if(AppState.todayWords.length === 0) {
-    container.innerHTML = `<div class="p-10 text-center text-slate-500 text-sm mt-20">请先在「一阶生存」获取今日核心词汇。</div>`;
+    container.innerHTML = `<div class="p-10 text-center text-slate-500 text-sm mt-20 w-full">请先在「一阶生存」获取今日核心词汇。</div>`;
     return;
   }
 
@@ -516,19 +531,16 @@ function renderStage2View() {
     if(!word) return;
     const en = tmpl.template.replace(/\[TARGET_\d+\]/, word.en.replace('.',''));
     const zh = tmpl.zh.replace(/\[目标词块\d+\]/, word.zh.replace('。',''));
-    const color = i%2===0?'bg-red-500':'bg-yellow-500';
     
     logsHtml += `
-      <div class="w-full rounded-xl border font-mono text-sm bg-[#0f172a] border-slate-800 mb-3 overflow-hidden">
-        <div class="p-4 flex gap-3 items-start border-b border-slate-800/50">
-          <span class="mt-1.5 shrink-0 w-2 h-2 rounded-full ${color}"></span>
-          <p class="text-slate-300 leading-relaxed whitespace-pre-wrap">${en}</p>
+      <div class="w-full rounded-xl border font-mono text-sm bg-[#0f172a] border-slate-800 mb-4 overflow-hidden shadow-lg">
+        <div class="p-5 flex gap-3 items-start border-b border-slate-800/60">
+          <p class="text-slate-300 leading-relaxed whitespace-pre-wrap text-base">${en}</p>
         </div>
-        <div class="px-4 pb-4 pt-3 bg-slate-900/50">
-          <p class="text-slate-300 text-[13px] leading-relaxed mb-3 font-sans whitespace-pre-wrap">${zh}</p>
-          <div class="text-[10px] text-purple-400/80 mb-3 border-l-2 border-purple-500 pl-2">考点关联：${word.en}</div>
-          <button onclick="playAudio('${en.replace(/'/g, "\\'")}', event)" class="w-full text-xs flex items-center justify-center gap-2 text-purple-400 bg-purple-500/10 py-2.5 rounded-lg border border-purple-500/30">
-            <i class="ph-fill ph-speaker-high"></i> 原音慢速重放
+        <div class="px-5 pb-5 pt-4 bg-slate-900/50">
+          <p class="text-slate-300 text-sm leading-relaxed mb-4 font-sans whitespace-pre-wrap">${zh}</p>
+          <button onclick="playAudio('${en.replace(/'/g, "\\'")}', event)" class="w-full text-xs flex items-center justify-center gap-2 text-purple-400 bg-purple-500/10 active:bg-purple-500/20 py-3 rounded-lg border border-purple-500/30 transition-colors shadow-sm">
+            <i class="ph-fill ph-speaker-high text-base"></i> 原音慢速重放
           </button>
         </div>
       </div>
@@ -536,14 +548,11 @@ function renderStage2View() {
   });
 
   container.innerHTML = `
-    <div class="w-full max-w-md mx-auto px-4 py-6">
-      <div class="mb-4 border-b border-slate-800 pb-2">
-        <h2 class="text-xl font-black text-purple-400 flex items-center gap-2"><i class="ph-fill ph-radio"></i> 二阶强绑定语境</h2>
-        <p class="text-[10px] text-slate-500 font-mono mt-1">Daily Linked Input</p>
+    <div class="w-full max-w-md mx-auto px-4 py-6 flex-1">
+      <div class="mb-5 border-b border-slate-800 pb-3">
+        <h2 class="text-2xl font-black text-purple-400 flex items-center gap-2"><i class="ph-fill ph-radio"></i> 二阶强绑定语境</h2>
+        <p class="text-[10px] text-slate-500 font-mono mt-1 uppercase tracking-widest">Real Context Decoding</p>
       </div>
-      <p class="text-[11px] text-slate-400 mb-4 bg-slate-800/40 p-3 rounded-lg border border-slate-700/50">
-        下面包含你今天刚学的词块。请尝试翻译整段话。
-      </p>
       ${logsHtml}
     </div>
   `;
@@ -551,33 +560,34 @@ function renderStage2View() {
 
 function renderStage3View() {
   const container = document.getElementById('main-content');
-  
   let listHtml = AppState.diaries.length === 0 
-    ? '<div class="text-center py-8 text-slate-600"><i class="ph ph-terminal text-3xl mb-2 opacity-20"></i><p class="text-[10px] font-mono">今日还未输出频率</p></div>'
+    ? '<div class="text-center py-10 text-slate-600"><i class="ph ph-terminal text-4xl mb-3 opacity-20"></i><p class="text-xs font-mono tracking-widest">AWAITING INPUT</p></div>'
     : AppState.diaries.map(d => `
-        <div class="bg-slate-800/40 border border-slate-700/50 rounded-lg p-4 mb-3">
-          <p class="text-sm text-slate-200 font-mono mb-3 leading-relaxed">${d.text}</p>
-          <div class="flex items-center justify-between text-[10px] text-slate-500 font-mono">
-            <span>${d.time}</span><span class="text-emerald-400/80"><i class="ph-fill ph-check-circle"></i> Shifted</span>
+        <div class="bg-slate-800/40 border border-slate-700/50 rounded-xl p-5 mb-4 shadow-sm">
+          <p class="text-base text-slate-200 font-mono mb-3 leading-relaxed">${d.text}</p>
+          <div class="flex items-center justify-between text-xs text-slate-500 font-mono">
+            <span>${d.time}</span><span class="text-emerald-400/80 flex items-center gap-1"><i class="ph-fill ph-check-circle"></i> Shifted</span>
           </div>
         </div>
       `).join('');
 
   container.innerHTML = `
-    <div class="w-full max-w-md mx-auto px-4 py-6">
-      <div class="mb-4 border-b border-slate-800 pb-2">
-        <h2 class="text-xl font-black text-emerald-400 flex items-center gap-2"><i class="ph-fill ph-shield-check"></i> 三阶显化日记</h2>
+    <div class="w-full max-w-md mx-auto px-4 py-6 flex-1">
+      <div class="mb-5 border-b border-slate-800 pb-3">
+        <h2 class="text-2xl font-black text-emerald-400 flex items-center gap-2"><i class="ph-fill ph-shield-check"></i> 三阶显化日记</h2>
+        <p class="text-[10px] text-slate-500 font-mono mt-1 uppercase tracking-widest">Manifestation Output</p>
       </div>
-      <div class="w-full bg-[#0f172a] border border-slate-700 rounded-xl p-4 mb-6 shadow-lg">
-        <textarea id="diary-input" placeholder="用今天学的词块造句..." class="w-full h-20 bg-transparent text-slate-200 placeholder-slate-600 focus:outline-none resize-none font-mono text-sm"></textarea>
-        <div class="flex justify-end mt-2 pt-2 border-t border-slate-800">
-          <button onclick="window.sendDiary()" class="flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold bg-emerald-600 text-white active:scale-95">
+      <div class="w-full bg-[#0f172a] border border-slate-700 rounded-2xl p-4 mb-6 shadow-xl focus-within:border-emerald-500/50 transition-colors">
+        <textarea id="diary-input" placeholder="用今天学的词块造句..." class="w-full h-24 bg-transparent text-slate-200 placeholder-slate-600 focus:outline-none resize-none font-mono text-base"></textarea>
+        <div class="flex justify-between items-center mt-2 pt-3 border-t border-slate-800">
+          <i class="ph ph-pen-nib text-slate-600"></i>
+          <button onclick="window.sendDiary()" class="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold bg-emerald-600 text-white active:scale-95 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-transform">
             <i class="ph-fill ph-paper-plane-right"></i> 发射显化
           </button>
         </div>
       </div>
       <div>
-        <h3 class="text-[10px] text-slate-500 font-mono tracking-widest uppercase border-b border-slate-800 pb-2 mb-3">现实锚点</h3>
+        <h3 class="text-xs text-slate-500 font-mono tracking-widest uppercase border-b border-slate-800 pb-2 mb-4">现实锚点</h3>
         ${listHtml}
       </div>
     </div>
@@ -596,15 +606,6 @@ window.sendDiary = function() {
   showToast('🌌 你的宇宙能量已锚定！');
   renderStage3View();
 };
-
-
-// 5. 初始化入口
-window.onload = () => {
-  // 预热语音引擎
-  if(window.speechSynthesis) window.speechSynthesis.getVoices();
-  switchTab('stage1');
-};
-
 </script>
 </body>
 </html>
