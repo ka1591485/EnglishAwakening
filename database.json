@@ -1,0 +1,93 @@
+{
+  "survival": {
+    "group1": [
+      { "id": 1, "en": "I want this.", "zh": "我想要这个。", "sound": "爱 万特 迪斯", "words": [{"w":"I", "m":"我"}, {"w":"want", "m":"想要"}, {"w":"this", "m":"这个"}] },
+      { "id": 2, "en": "How much is it?", "zh": "这多少钱？", "sound": "好 吗起 意思 伊特？", "words": [{"w":"How", "m":"多少"}, {"w":"much", "m":"大量"}, {"w":"is", "m":"是"}, {"w":"it", "m":"它"}] },
+      { "id": 3, "en": "Excuse me.", "zh": "打扰一下。", "sound": "易克斯丘兹 密", "words": [{"w":"Excuse", "m":"原谅"}, {"w":"me", "m":"我"}] },
+      { "id": 4, "en": "Can you help me?", "zh": "你能帮我吗？", "sound": "坎 尤 嗨尔普 密？", "words": [{"w":"Can", "m":"能"}, {"w":"you", "m":"你"}, {"w":"help", "m":"帮助"}, {"w":"me", "m":"我"}] },
+      { "id": 5, "en": "Where is the toilet?", "zh": "厕所在哪里？", "sound": "喂儿 意思 惹 托伊勒特？", "words": [{"w":"Where", "m":"哪里"}, {"w":"is", "m":"是"}, {"w":"the", "m":"特指"}, {"w":"toilet", "m":"厕所"}] },
+      { "id": 6, "en": "I do not understand.", "zh": "我不懂。", "sound": "爱 动特 安德斯单德", "words": [{"w":"I", "m":"我"}, {"w":"do", "m":"助词"}, {"w":"not", "m":"不"}, {"w":"understand", "m":"理解"}] },
+      { "id": 7, "en": "Speak slowly, please.", "zh": "请说慢点。", "sound": "斯皮克 斯楼里 普利兹", "words": [{"w":"Speak", "m":"说"}, {"w":"slowly", "m":"慢地"}, {"w":"please", "m":"请"}] },
+      { "id": 8, "en": "I am sorry.", "zh": "我很抱歉。", "sound": "爱 艾姆 搜瑞", "words": [{"w":"I", "m":"我"}, {"w":"am", "m":"是"}, {"w":"sorry", "m":"抱歉的"}] },
+      { "id": 9, "en": "Thank you very much.", "zh": "非常感谢。", "sound": "三克 尤 威瑞 吗起", "words": [{"w":"Thank", "m":"感谢"}, {"w":"you", "m":"你"}, {"w":"very", "m":"非常"}, {"w":"much", "m":"多"}] },
+      { "id": 10, "en": "What time is it?", "zh": "几点了？", "sound": "沃特 泰姆 意思 伊特？", "words": [{"w":"What", "m":"什么"}, {"w":"time", "m":"时间"}, {"w":"is", "m":"是"}, {"w":"it", "m":"它"}] }
+    ],
+    "group2": [
+      { "id": 11, "en": "Nice to meet you.", "zh": "很高兴见到你。", "sound": "耐斯 图 密特 尤", "words": [{"w":"Nice", "m":"好的"}, {"w":"to", "m":"去"}, {"w":"meet", "m":"遇见"}, {"w":"you", "m":"你"}] },
+      { "id": 12, "en": "How are you doing?", "zh": "你过得怎么样？", "sound": "好 阿 尤 都影？", "words": [{"w":"How", "m":"如何"}, {"w":"are", "m":"是"}, {"w":"you", "m":"你"}, {"w":"doing", "m":"做/进行"}] },
+      { "id": 13, "en": "Have a good day.", "zh": "祝你有美好的一天。", "sound": "害夫 饿 古德 得", "words": [{"w":"Have", "m":"有"}, {"w":"a", "m":"一个"}, {"w":"good", "m":"好的"}, {"w":"day", "m":"一天"}] },
+      { "id": 14, "en": "See you later.", "zh": "回头见。", "sound": "戏 尤 累特", "words": [{"w":"See", "m":"看见"}, {"w":"you", "m":"你"}, {"w":"later", "m":"后来"}] },
+      { "id": 15, "en": "I think so.", "zh": "我认为是这样。", "sound": "爱 씽克 搜", "words": [{"w":"I", "m":"我"}, {"w":"think", "m":"认为"}, {"w":"so", "m":"如此"}] },
+      { "id": 16, "en": "Are you sure?", "zh": "你确定吗？", "sound": "阿 尤 硕尔？", "words": [{"w":"Are", "m":"是"}, {"w":"you", "m":"你"}, {"w":"sure", "m":"确定的"}] },
+      { "id": 17, "en": "Of course.", "zh": "当然。", "sound": "欧夫 靠斯", "words": [{"w":"Of", "m":"的"}, {"w":"course", "m":"过程"}] },
+      { "id": 18, "en": "I am just looking.", "zh": "我只是看看。", "sound": "爱 艾姆 贾斯特 卢肯", "words": [{"w":"I", "m":"我"}, {"w":"am", "m":"是"}, {"w":"just", "m":"仅仅"}, {"w":"looking", "m":"看"}] },
+      { "id": 19, "en": "Wait a minute.", "zh": "等一下。", "sound": "威特 饿 密尼特", "words": [{"w":"Wait", "m":"等待"}, {"w":"a", "m":"一"}, {"w":"minute", "m":"分钟"}] },
+      { "id": 20, "en": "Take care.", "zh": "保重。", "sound": "泰克 凯儿", "words": [{"w":"Take", "m":"拿/照顾"}, {"w":"care", "m":"关心"}] }
+    ],
+    "group3": [
+      { "id": 21, "en": "Where is the train station?", "zh": "火车站怎么走？", "sound": "喂儿 意思 惹 吹恩 斯得神？", "words": [{"w":"Where", "m":"哪里"}, {"w":"is", "m":"是"}, {"w":"the", "m":"特指"}, {"w":"train", "m":"火车"}, {"w":"station", "m":"车站"}] },
+      { "id": 22, "en": "One ticket, please.", "zh": "请给我一张票。", "sound": "万 踢克特 普利兹", "words": [{"w":"One", "m":"一"}, {"w":"ticket", "m":"票"}, {"w":"please", "m":"请"}] },
+      { "id": 23, "en": "Is this the right way?", "zh": "走这条路对吗？", "sound": "意思 迪斯 惹 瑞特 威？", "words": [{"w":"Is", "m":"是"}, {"w":"this", "m":"这"}, {"w":"the", "m":"特指"}, {"w":"right", "m":"正确的"}, {"w":"way", "m":"路"}] },
+      { "id": 24, "en": "Keep going straight.", "zh": "一直往前走。", "sound": "基普 够影 斯锤特", "words": [{"w":"Keep", "m":"保持"}, {"w":"going", "m":"走"}, {"w":"straight", "m":"直着"}] },
+      { "id": 25, "en": "Turn left here.", "zh": "在这里左转。", "sound": "特恩 莱夫特 嘿儿", "words": [{"w":"Turn", "m":"转弯"}, {"w":"left", "m":"左"}, {"w":"here", "m":"这里"}] },
+      { "id": 26, "en": "Can I pay by card?", "zh": "可以刷卡吗？", "sound": "坎 爱 佩 白 卡的？", "words": [{"w":"Can", "m":"能"}, {"w":"I", "m":"我"}, {"w":"pay", "m":"支付"}, {"w":"by", "m":"用"}, {"w":"card", "m":"卡"}] },
+      { "id": 27, "en": "I have a reservation.", "zh": "我预订过了。", "sound": "爱 害夫 饿 惹泽维神", "words": [{"w":"I", "m":"我"}, {"w":"have", "m":"有"}, {"w":"a", "m":"一个"}, {"w":"reservation", "m":"预定"}] },
+      { "id": 28, "en": "Wake me up at six.", "zh": "六点叫醒我。", "sound": "威克 密 阿普 艾特 希克斯", "words": [{"w":"Wake", "m":"唤醒"}, {"w":"me", "m":"我"}, {"w":"up", "m":"起"}, {"w":"at", "m":"在(时间)"}, {"w":"six", "m":"六"}] },
+      { "id": 29, "en": "I lost my bag.", "zh": "我的包丢了。", "sound": "爱 罗斯特 麦 拜格", "words": [{"w":"I", "m":"我"}, {"w":"lost", "m":"丢失"}, {"w":"my", "m":"我的"}, {"w":"bag", "m":"包"}] },
+      { "id": 30, "en": "I feel sick.", "zh": "我不舒服。", "sound": "爱 菲欧 希克", "words": [{"w":"I", "m":"我"}, {"w":"feel", "m":"感觉"}, {"w":"sick", "m":"生病的"}] }
+    ],
+    "group4": [
+      { "id": 31, "en": "I would like to book a table.", "zh": "我想预订一桌。", "sound": "爱 伍德 莱克 图 布克 饿 泰博", "words": [{"w":"I", "m":"我"}, {"w":"would like", "m":"想要"}, {"w":"to", "m":"去"}, {"w":"book", "m":"预订"}, {"w":"a", "m":"一个"}, {"w":"table", "m":"桌子"}] },
+      { "id": 32, "en": "A table for two, please.", "zh": "请给我两人桌。", "sound": "饿 泰博 佛 兔 普利兹", "words": [{"w":"A", "m":"一个"}, {"w":"table", "m":"桌子"}, {"w":"for", "m":"给"}, {"w":"two", "m":"两个"}, {"w":"please", "m":"请"}] },
+      { "id": 33, "en": "Under the name of Smith.", "zh": "预订名字是史密斯。", "sound": "安德 惹 馁姆 欧夫 斯密斯", "words": [{"w":"Under", "m":"在...名下"}, {"w":"the", "m":"特指"}, {"w":"name", "m":"名字"}, {"w":"of", "m":"的"}, {"w":"Smith", "m":"史密斯"}] },
+      { "id": 34, "en": "Can we sit by the window?", "zh": "我们可以坐在窗边吗？", "sound": "坎 威 斯特 白 惹 稳斗？", "words": [{"w":"Can", "m":"能"}, {"w":"we", "m":"我们"}, {"w":"sit", "m":"坐"}, {"w":"by", "m":"在...旁边"}, {"w":"the", "m":"特指"}, {"w":"window", "m":"窗户"}] },
+      { "id": 35, "en": "Could we have the menu?", "zh": "能给我们菜单吗？", "sound": "库的 威 害夫 惹 曼纽？", "words": [{"w":"Could", "m":"能"}, {"w":"we", "m":"我们"}, {"w":"have", "m":"有/拿"}, {"w":"the", "m":"特指"}, {"w":"menu", "m":"菜单"}] },
+      { "id": 36, "en": "What do you recommend?", "zh": "你推荐什么？", "sound": "沃特 度 尤 瑞克曼的？", "words": [{"w":"What", "m":"什么"}, {"w":"do", "m":"助词"}, {"w":"you", "m":"你"}, {"w":"recommend", "m":"推荐"}] },
+      { "id": 37, "en": "I will have this one.", "zh": "我要这个。", "sound": "爱 威尔 害夫 迪斯 万", "words": [{"w":"I", "m":"我"}, {"w":"will", "m":"将"}, {"w":"have", "m":"吃/点"}, {"w":"this", "m":"这个"}, {"w":"one", "m":"一个(代词)"}] },
+      { "id": 38, "en": "We are not ready to order.", "zh": "我们还没准备好点单。", "sound": "威 阿 闹特 瑞迪 图 欧德", "words": [{"w":"We", "m":"我们"}, {"w":"are", "m":"是"}, {"w":"not", "m":"不"}, {"w":"ready", "m":"准备好的"}, {"w":"to", "m":"去"}, {"w":"order", "m":"点单"}] },
+      { "id": 39, "en": "Please give us a few minutes.", "zh": "请再给我们几分钟。", "sound": "普利兹 给我 阿斯 饿 弗由 密尼茨", "words": [{"w":"Please", "m":"请"}, {"w":"give", "m":"给"}, {"w":"us", "m":"我们"}, {"w":"a few", "m":"几个"}, {"w":"minutes", "m":"分钟"}] },
+      { "id": 40, "en": "Does this dish have peanuts?", "zh": "这道菜有花生吗？", "sound": "达兹 迪斯 迪许 害夫 劈纳茨？", "words": [{"w":"Does", "m":"助词"}, {"w":"this", "m":"这"}, {"w":"dish", "m":"菜肴"}, {"w":"have", "m":"有"}, {"w":"peanuts", "m":"花生"}] },
+      { "id": 41, "en": "I am vegetarian.", "zh": "我是素食主义者。", "sound": "爱 艾姆 威吉泰瑞恩", "words": [{"w":"I", "m":"我"}, {"w":"am", "m":"是"}, {"w":"vegetarian", "m":"素食主义者"}] },
+      { "id": 42, "en": "No onions, please.", "zh": "请不要放洋葱。", "sound": "弄 欧尼恩斯 普利兹", "words": [{"w":"No", "m":"不要"}, {"w":"onions", "m":"洋葱"}, {"w":"please", "m":"请"}] },
+      { "id": 43, "en": "I would like my steak medium rare.", "zh": "我的牛排要三分熟。", "sound": "爱 伍德 莱克 麦 斯泰克 米迪姆 瑞儿", "words": [{"w":"I", "m":"我"}, {"w":"would like", "m":"想要"}, {"w":"my", "m":"我的"}, {"w":"steak", "m":"牛排"}, {"w":"medium rare", "m":"三分熟"}] },
+      { "id": 44, "en": "Can I have a glass of water?", "zh": "能给我一杯水吗？", "sound": "坎 爱 害夫 饿 哥拉斯 欧夫 窝特？", "words": [{"w":"Can", "m":"能"}, {"w":"I", "m":"我"}, {"w":"have", "m":"有/拿"}, {"w":"a", "m":"一个"}, {"w":"glass", "m":"玻璃杯"}, {"w":"of", "m":"的"}, {"w":"water", "m":"水"}] },
+      { "id": 45, "en": "Still or sparkling water?", "zh": "纯净水还是气泡水？", "sound": "斯丢 欧儿 斯巴克令 窝特？", "words": [{"w":"Still", "m":"静止的/纯净的"}, {"w":"or", "m":"或者"}, {"w":"sparkling", "m":"起泡的"}, {"w":"water", "m":"水"}] },
+      { "id": 46, "en": "We would like some bread.", "zh": "我们想要一些面包。", "sound": "威 伍德 莱克 桑姆 布瑞的", "words": [{"w":"We", "m":"我们"}, {"w":"would like", "m":"想要"}, {"w":"some", "m":"一些"}, {"w":"bread", "m":"面包"}] },
+      { "id": 47, "en": "That is all for now.", "zh": "目前就点这些。", "sound": "杂特 意思 奥 佛 闹", "words": [{"w":"That", "m":"那"}, {"w":"is", "m":"是"}, {"w":"all", "m":"全部"}, {"w":"for", "m":"对于"}, {"w":"now", "m":"现在"}] },
+      { "id": 48, "en": "How long will it take?", "zh": "大概需要多久？", "sound": "好 龙 威尔 伊特 泰克？", "words": [{"w":"How", "m":"多少"}, {"w":"long", "m":"长/久"}, {"w":"will", "m":"将要"}, {"w":"it", "m":"它"}, {"w":"take", "m":"花费(时间)"}] },
+      { "id": 49, "en": "We are ready to order.", "zh": "我们准备好点单了。", "sound": "威 阿 瑞迪 图 欧德", "words": [{"w":"We", "m":"我们"}, {"w":"are", "m":"是"}, {"w":"ready", "m":"准备好的"}, {"w":"to", "m":"去"}, {"w":"order", "m":"点单"}] },
+      { "id": 50, "en": "Can I get an extra plate?", "zh": "能多给我一个盘子吗？", "sound": "坎 爱 盖特 安 艾克斯戳 普雷特？", "words": [{"w":"Can", "m":"能"}, {"w":"I", "m":"我"}, {"w":"get", "m":"得到"}, {"w":"an", "m":"一个"}, {"w":"extra", "m":"额外的"}, {"w":"plate", "m":"盘子"}] }
+    ],
+    "group5": [
+      { "id": 51, "en": "Excuse me, my food is cold.", "zh": "打扰一下，我的食物凉了。", "sound": "易克斯丘兹 密 麦 夫的 意思 抠的", "words": [{"w":"Excuse me", "m":"打扰一下"}, {"w":"my", "m":"我的"}, {"w":"food", "m":"食物"}, {"w":"is", "m":"是"}, {"w":"cold", "m":"冷的"}] },
+      { "id": 52, "en": "This is not what I ordered.", "zh": "这不是我点的。", "sound": "迪斯 意思 闹特 沃特 爱 欧德的", "words": [{"w":"This", "m":"这"}, {"w":"is", "m":"是"}, {"w":"not", "m":"不"}, {"w":"what", "m":"什么/所...的"}, {"w":"I", "m":"我"}, {"w":"ordered", "m":"点单(过去式)"}] },
+      { "id": 53, "en": "The meat is too tough.", "zh": "这肉太老了(咬不动)。", "sound": "惹 密特 意思 兔 塔夫", "words": [{"w":"The", "m":"特指"}, {"w":"meat", "m":"肉"}, {"w":"is", "m":"是"}, {"w":"too", "m":"太"}, {"w":"tough", "m":"坚韧的/老的"}] },
+      { "id": 54, "en": "It is too salty for me.", "zh": "这对我来说太咸了。", "sound": "伊特 意思 兔 搜提 佛 密", "words": [{"w":"It", "m":"它"}, {"w":"is", "m":"是"}, {"w":"too", "m":"太"}, {"w":"salty", "m":"咸的"}, {"w":"for", "m":"对于"}, {"w":"me", "m":"我"}] },
+      { "id": 55, "en": "Could you heat this up?", "zh": "能帮我把这个加热一下吗？", "sound": "库的 尤 希特 迪斯 阿普？", "words": [{"w":"Could", "m":"能"}, {"w":"you", "m":"你"}, {"w":"heat", "m":"加热"}, {"w":"this", "m":"这个"}, {"w":"up", "m":"向上(起补足作用)"}] },
+      { "id": 56, "en": "We have been waiting for a long time.", "zh": "我们等了很久了。", "sound": "威 害夫 宾 威听 佛 饿 龙 泰姆", "words": [{"w":"We", "m":"我们"}, {"w":"have been", "m":"一直在"}, {"w":"waiting", "m":"等待"}, {"w":"for", "m":"为了"}, {"w":"a", "m":"一个"}, {"w":"long", "m":"长的"}, {"w":"time", "m":"时间"}] },
+      { "id": 57, "en": "Is our food coming soon?", "zh": "我们的菜快上了吗？", "sound": "意思 奥尔 夫的 康明 孙？", "words": [{"w":"Is", "m":"是"}, {"w":"our", "m":"我们的"}, {"w":"food", "m":"食物"}, {"w":"coming", "m":"来"}, {"w":"soon", "m":"很快"}] },
+      { "id": 58, "en": "This glass is not clean.", "zh": "这个杯子不干净。", "sound": "迪斯 哥拉斯 意思 闹特 克林", "words": [{"w":"This", "m":"这个"}, {"w":"glass", "m":"玻璃杯"}, {"w":"is", "m":"是"}, {"w":"not", "m":"不"}, {"w":"clean", "m":"干净的"}] },
+      { "id": 59, "en": "Can I speak to the manager?", "zh": "能叫你们经理来一下吗？", "sound": "坎 爱 斯皮克 图 惹 麦尼哲？", "words": [{"w":"Can", "m":"能"}, {"w":"I", "m":"我"}, {"w":"speak", "m":"说"}, {"w":"to", "m":"对"}, {"w":"the", "m":"特指"}, {"w":"manager", "m":"经理"}] },
+      { "id": 60, "en": "Everything was delicious.", "zh": "所有东西都很好吃。", "sound": "埃夫瑞씽 沃斯 迪利舍斯", "words": [{"w":"Everything", "m":"每件事物"}, {"w":"was", "m":"是(过去式)"}, {"w":"delicious", "m":"美味的"}] },
+      { "id": 61, "en": "Could we see the dessert menu?", "zh": "能给我们看下甜点菜单吗？", "sound": "库的 威 戏 惹 迪泽特 曼纽？", "words": [{"w":"Could", "m":"能"}, {"w":"we", "m":"我们"}, {"w":"see", "m":"看"}, {"w":"the", "m":"特指"}, {"w":"dessert", "m":"甜点"}, {"w":"menu", "m":"菜单"}] },
+      { "id": 62, "en": "I am full, thank you.", "zh": "我吃饱了，谢谢。", "sound": "爱 艾姆 富欧 三克 尤", "words": [{"w":"I", "m":"我"}, {"w":"am", "m":"是"}, {"w":"full", "m":"饱的"}, {"w":"thank", "m":"感谢"}, {"w":"you", "m":"你"}] },
+      { "id": 63, "en": "Can I have the bill, please?", "zh": "麻烦买单 / 请给我账单。", "sound": "坎 爱 害夫 惹 标 普利兹？", "words": [{"w":"Can", "m":"能"}, {"w":"I", "m":"我"}, {"w":"have", "m":"拿/要"}, {"w":"the", "m":"特指"}, {"w":"bill", "m":"账单"}, {"w":"please", "m":"请"}] },
+      { "id": 64, "en": "Do you accept credit cards?", "zh": "你们收信用卡吗？", "sound": "度 尤 额科塞普特 奎迪特 卡兹？", "words": [{"w":"Do", "m":"助词"}, {"w":"you", "m":"你"}, {"w":"accept", "m":"接受"}, {"w":"credit cards", "m":"信用卡"}] },
+      { "id": 65, "en": "We would like to pay separately.", "zh": "我们想分开付(AA制)。", "sound": "威 伍德 莱克 图 佩 塞普瑞特里", "words": [{"w":"We", "m":"我们"}, {"w":"would like", "m":"想要"}, {"w":"to", "m":"去"}, {"w":"pay", "m":"支付"}, {"w":"separately", "m":"分开地"}] },
+      { "id": 66, "en": "Is service included?", "zh": "包含服务费了吗？", "sound": "意思 瑟维斯 因克鲁迪德？", "words": [{"w":"Is", "m":"是"}, {"w":"service", "m":"服务/服务费"}, {"w":"included", "m":"包含的"}] },
+      { "id": 67, "en": "I think there is a mistake on the bill.", "zh": "我觉得账单上算错了。", "sound": "爱 씽克 贼儿 意思 饿 密斯泰克 昂 惹 标", "words": [{"w":"I", "m":"我"}, {"w":"think", "m":"认为"}, {"w":"there is", "m":"有"}, {"w":"a", "m":"一个"}, {"w":"mistake", "m":"错误"}, {"w":"on", "m":"在...上"}, {"w":"the", "m":"特指"}, {"w":"bill", "m":"账单"}] },
+      { "id": 68, "en": "We did not order this wine.", "zh": "我们没点这瓶酒。", "sound": "威 滴的 闹特 欧德 迪斯 歪恩", "words": [{"w":"We", "m":"我们"}, {"w":"did not", "m":"没有(过去式)"}, {"w":"order", "m":"点单"}, {"w":"this", "m":"这个"}, {"w":"wine", "m":"葡萄酒"}] },
+      { "id": 69, "en": "Let me pay for this.", "zh": "这顿我来付吧(请客)。", "sound": "莱特 密 佩 佛 迪斯", "words": [{"w":"Let", "m":"让"}, {"w":"me", "m":"我"}, {"w":"pay", "m":"支付"}, {"w":"for", "m":"为了/对于"}, {"w":"this", "m":"这个"}] },
+      { "id": 70, "en": "Keep the change.", "zh": "不用找零了。", "sound": "基普 惹 晨吉", "words": [{"w":"Keep", "m":"保留"}, {"w":"the", "m":"特指"}, {"w":"change", "m":"零钱"}] }
+    ]
+  },
+  "dev": {
+    "group1": [
+      { "id": 101, "en": "Failed to fetch data.", "zh": "获取数据失败。", "sound": "费欧德 图 费吃 得他", "words": [{"w":"Failed", "m":"失败"}, {"w":"to", "m":"去"}, {"w":"fetch", "m":"获取"}, {"w":"data", "m":"数据"}] },
+      { "id": 102, "en": "Invalid syntax error.", "zh": "无效语法错误。", "sound": "因瓦利德 辛泰克斯 艾若", "words": [{"w":"Invalid", "m":"无效的"}, {"w":"syntax", "m":"语法"}, {"w":"error", "m":"错误"}] },
+      { "id": 103, "en": "Out of memory.", "zh": "内存溢出。", "sound": "奥特 欧夫 迈莫瑞", "words": [{"w":"Out", "m":"出"}, {"w":"of", "m":"的"}, {"w":"memory", "m":"内存"}] },
+      { "id": 104, "en": "Merge conflict found.", "zh": "发现合并冲突。", "sound": "默吉 康弗利克特 方德", "words": [{"w":"Merge", "m":"合并"}, {"w":"conflict", "m":"冲突"}, {"w":"found", "m":"找到"}] },
+      { "id": 105, "en": "Cannot read property.", "zh": "无法读取属性。", "sound": "坎闹特 瑞的 普绕破提", "words": [{"w":"Cannot", "m":"不能"}, {"w":"read", "m":"读取"}, {"w":"property", "m":"属性"}] }
+    ]
+  }
+}
