@@ -624,4 +624,30 @@
     "group2": [
       { "id": 206, "en": "Deploy to production.", "zh": "部署到生产环境。", "sound": "迪普洛伊 图 普罗达克神", "words": [{"w":"Deploy", "m":"部署"}, {"w":"to", "m":"到"}, {"w":"production", "m":"生产环境"}] },
       { "id": 207, "en": "Permission denied.", "zh": "权限被拒绝。", "sound": "盆密神 迪耐德", "words": [{"w":"Permission", "m":"权限"}, {"w":"denied", "m":"被拒绝"}] },
-      { "id": 208, "en": "Connection timed out.", "zh": "连接超时。", "sound": "康耐克神 泰姆德 奥特", "words": [{"w":"Connection", "m":"连接"}, {"
+      { "id": 208, "en": "Connection timed out.", "zh": "连接超时。", "sound": "康耐克神 泰姆德 奥特", "words": [{"w":"Connection", "m":"连接"}, {"w":"timed out", "m":"超时"}] },
+      { "id": 209, "en": "Internal server error.", "zh": "内部服务器错误。", "sound": "因特诺 瑟惹 艾若", "words": [{"w":"Internal", "m":"内部的"}, {"w":"server", "m":"服务器"}, {"w":"error", "m":"错误"}] },
+      { "id": 210, "en": "Variable is not defined.", "zh": "变量未定义。", "sound": "威瑞欧博 意思 闹特 迪方德", "words": [{"w":"Variable", "m":"变量"}, {"w":"is", "m":"是"}, {"w":"not", "m":"不"}, {"w":"defined", "m":"定义的"}] }
+    ],
+    "group3": [
+      { "id": 211, "en": "Unexpected token in JSON.", "zh": "JSON中出现意外标记。", "sound": "安易克斯配克提 投肯 因 杰森", "words": [{"w":"Unexpected", "m":"意外的"}, {"w":"token", "m":"标记"}, {"w":"in", "m":"在内"}, {"w":"JSON", "m":"数据格式"}] },
+      { "id": 212, "en": "Commit your changes.", "zh": "提交你的更改。", "sound": "克密特 尤尔 晨吉斯", "words": [{"w":"Commit", "m":"提交"}, {"w":"your", "m":"你的"}, {"w":"changes", "m":"更改"}] },
+      { "id": 213, "en": "Push to remote branch.", "zh": "推送到远程分支。", "sound": "普许 图 瑞某特 布然吃", "words": [{"w":"Push", "m":"推送"}, {"w":"to", "m":"到"}, {"w":"remote", "m":"远程"}, {"w":"branch", "m":"分支"}] },
+      { "id": 214, "en": "Pull request approved.", "zh": "拉取请求已批准。", "sound": "普欧 瑞奎斯特 饿普入屋的", "words": [{"w":"Pull", "m":"拉取"}, {"w":"request", "m":"请求"}, {"w":"approved", "m":"批准的"}] },
+      { "id": 215, "en": "Stack overflow.", "zh": "栈溢出。", "sound": "斯泰克 欧窝弗楼", "words": [{"w":"Stack", "m":"栈"}, {"w":"overflow", "m":"溢出"}] }
+    ],
+    "group4": [
+      { "id": 216, "en": "Component did mount.", "zh": "组件已挂载(React)。", "sound": "康剖能特 滴的 芒特", "words": [{"w":"Component", "m":"组件"}, {"w":"did", "m":"做(过去式)"}, {"w":"mount", "m":"挂载"}] },
+      { "id": 217, "en": "Awaiting async function.", "zh": "等待异步函数。", "sound": "饿威听 诶星克 方克神", "words": [{"w":"Awaiting", "m":"等待"}, {"w":"async", "m":"异步"}, {"w":"function", "m":"函数"}] },
+      { "id": 218, "en": "Build failed during compilation.", "zh": "编译期间构建失败。", "sound": "彪的 费欧德 丢润 康派累神", "words": [{"w":"Build", "m":"构建"}, {"w":"failed", "m":"失败"}, {"w":"during", "m":"在...期间"}, {"w":"compilation", "m":"编译"}] },
+      { "id": 219, "en": "Database connection lost.", "zh": "数据库连接丢失。", "sound": "得他贝斯 康耐克神 罗斯特", "words": [{"w":"Database", "m":"数据库"}, {"w":"connection", "m":"连接"}, {"w":"lost", "m":"丢失"}] },
+      { "id": 220, "en": "Process finished with exit code 1.", "zh": "进程以退出代码1结束。", "sound": "普绕塞斯 菲尼许的 威斯 艾克字特 抠的 万", "words": [{"w":"Process", "m":"进程"}, {"w":"finished", "m":"结束"}, {"w":"with", "m":"带着"}, {"w":"exit code", "m":"退出代码"}, {"w":"1", "m":"一"}] }
+    ],
+    "group5": [
+      { "id": 221, "en": "Module not found.", "zh": "找不到模块。", "sound": "某丢 闹特 方德", "words": [{"w":"Module", "m":"模块"}, {"w":"not", "m":"不"}, {"w":"found", "m":"找到"}] },
+      { "id": 222, "en": "Function is not a constructor.", "zh": "函数不是一个构造器。", "sound": "方克神 意思 闹特 饿 康斯戳克特", "words": [{"w":"Function", "m":"函数"}, {"w":"is", "m":"是"}, {"w":"not", "m":"不"}, {"w":"a", "m":"一个"}, {"w":"constructor", "m":"构造器"}] },
+      { "id": 223, "en": "Network request failed.", "zh": "网络请求失败。", "sound": "捏特窝克 瑞奎斯特 费欧德", "words": [{"w":"Network", "m":"网络"}, {"w":"request", "m":"请求"}, {"w":"failed", "m":"失败"}] },
+      { "id": 224, "en": "Invalid API key provided.", "zh": "提供的API密钥无效。", "sound": "因瓦利德 诶皮爱 奇 普绕外滴的", "words": [{"w":"Invalid", "m":"无效的"}, {"w":"API key", "m":"密钥"}, {"w":"provided", "m":"提供的"}] },
+      { "id": 225, "en": "Access token expired.", "zh": "访问令牌已过期。", "sound": "艾克塞斯 投肯 易克斯派尔的", "words": [{"w":"Access", "m":"访问"}, {"w":"token", "m":"令牌"}, {"w":"expired", "m":"过期"}] }
+    ]
+  }
+}
