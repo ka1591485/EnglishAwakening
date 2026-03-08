@@ -138,7 +138,7 @@ window.onload = async () => {
       <div class="flex flex-col items-center justify-center h-full px-6 text-center text-red-400 w-full">
         <i class="ph ph-warning text-6xl mb-4"></i>
         <h2 class="text-2xl font-bold mb-2">数据加载失败</h2>
-        <p class="text-sm text-slate-400 mt-4 leading-relaxed">无法读取 database.json<br>请确保它在GitHub同级目录。</p>
+        <p class="text-sm text-slate-400 mt-4 leading-relaxed">无法读取 database.json 或格式有误<br>请检查文件格式或控制台(Console)。</p>
       </div>
     `;
   }
@@ -286,7 +286,7 @@ function updateMicUI(isListening) {
   }
 }
 
-// ================= 彻底修复：无限课程 + 进度持久化存储 =================
+// ================= 修复：加强版缓存与进度控制 =================
 function saveStateToCache(tab) {
   const todayStr = new Date().toISOString().split('T')[0];
   const cacheKey = `quantum_state_${tab}_${todayStr}`;
@@ -305,17 +305,22 @@ function loadDailyPlan(tab) {
   const todayStr = new Date().toISOString().split('T')[0];
   const cacheKey = `quantum_state_${tab}_${todayStr}`;
   
-  // 1. 如果今天有缓存，直接读取（防止切换Tab或刷新丢失进度）
+  // 1. 尝试从缓存恢复
   const cached = localStorage.getItem(cacheKey);
   if (cached) {
-    const parsed = JSON.parse(cached);
-    AppState.activeDeck = parsed.activeDeck;
-    AppState.totalCards = parsed.totalCards;
-    AppState.learnedCards = parsed.learnedCards;
-    AppState.todayWords = parsed.todayWords;
-    AppState.deckTitle = parsed.deckTitle;
-    AppState.isSundayTest = parsed.isSundayTest;
-    return; // 从缓存恢复成功，直接返回
+    try {
+      const parsed = JSON.parse(cached);
+      AppState.activeDeck = parsed.activeDeck;
+      AppState.totalCards = parsed.totalCards;
+      AppState.learnedCards = parsed.learnedCards;
+      AppState.todayWords = parsed.todayWords;
+      AppState.deckTitle = parsed.deckTitle;
+      AppState.isSundayTest = parsed.isSundayTest;
+      return; 
+    } catch(e) {
+      console.error("Cache parsing error", e);
+      // 如果解析失败，继续往下走，重新生成
+    }
   }
 
   // 2. 如果没有缓存，重新生成今日课程
@@ -330,33 +335,26 @@ function loadDailyPlan(tab) {
 
   let currentWeek = parseInt(localStorage.getItem(`quantum_week_${tab}`)) || 0;
   
-  // ================= 核心修复：真实的 1-2 年 B1 强度排课逻辑 =================
-  // 假设每个 group 是 10 句。
-  // 我们希望每天新知是 20 句 (2个group)，复习也是 20 句。周末大考是 60 句 (6个group)。
-  // 因此，每周会消耗 6 个 group 的数据。
-  
+  // 每周消耗 6 个 group
   const maxWeeks = Math.ceil(allGroups.length / 6); 
   if (currentWeek >= maxWeeks && maxWeeks > 0) { 
-      currentWeek = 0; // 如果学完了所有的 JSON 词汇，循环回第一周
+      currentWeek = 0; 
       localStorage.setItem(`quantum_week_${tab}`, 0); 
   }
 
   let startIndex = currentWeek * 6;
   
-  // 获取周一、周三、周五的课程包（每次拿 2 个 group，也就是 20 句）
+  // 获取本周课程包，加入空数组判断兜底，防止 crash
   let gMon = []; let gWed = []; let gFri = [];
   
-  // 周一的 20 句 (group 1, 2)
   if(allGroups[startIndex]) gMon.push(...allGroups[startIndex]);
   if(allGroups[startIndex+1]) gMon.push(...allGroups[startIndex+1]);
-  if(gMon.length === 0) gMon = allGroups[0]; // 兜底
+  if(gMon.length === 0) gMon = allGroups[0] || [];
 
-  // 周三的 20 句 (group 3, 4)
   if(allGroups[startIndex+2]) gWed.push(...allGroups[startIndex+2]);
   if(allGroups[startIndex+3]) gWed.push(...allGroups[startIndex+3]);
   if(gWed.length === 0) gWed = gMon;
 
-  // 周五的 20 句 (group 5, 6)
   if(allGroups[startIndex+4]) gFri.push(...allGroups[startIndex+4]);
   if(allGroups[startIndex+5]) gFri.push(...allGroups[startIndex+5]);
   if(gFri.length === 0) gFri = gWed;
@@ -364,26 +362,23 @@ function loadDailyPlan(tab) {
   let pool = [];
   let titlePrefix = `第${currentWeek + 1}周`;
 
-  if(day === 1) { pool = gMon; AppState.deckTitle = `${titlePrefix} · 周一新知(20句)`; AppState.isSundayTest = false; }
-  else if(day === 2) { pool = gMon; AppState.deckTitle = `${titlePrefix} · 周二复习(20句)`; AppState.isSundayTest = false;}
-  else if(day === 3) { pool = gWed; AppState.deckTitle = `${titlePrefix} · 周三新知(20句)`; AppState.isSundayTest = false;}
-  else if(day === 4) { pool = gWed; AppState.deckTitle = `${titlePrefix} · 周四复习(20句)`; AppState.isSundayTest = false;}
-  else if(day === 5) { pool = gFri; AppState.deckTitle = `${titlePrefix} · 周五新知(20句)`; AppState.isSundayTest = false;}
-  else if(day === 6) { pool = gFri; AppState.deckTitle = `${titlePrefix} · 周六复习(20句)`; AppState.isSundayTest = false;}
+  if(day === 1) { pool = gMon; AppState.deckTitle = `${titlePrefix} · 周一新知(${pool.length}句)`; AppState.isSundayTest = false; }
+  else if(day === 2) { pool = gMon; AppState.deckTitle = `${titlePrefix} · 周二复习(${pool.length}句)`; AppState.isSundayTest = false;}
+  else if(day === 3) { pool = gWed; AppState.deckTitle = `${titlePrefix} · 周三新知(${pool.length}句)`; AppState.isSundayTest = false;}
+  else if(day === 4) { pool = gWed; AppState.deckTitle = `${titlePrefix} · 周四复习(${pool.length}句)`; AppState.isSundayTest = false;}
+  else if(day === 5) { pool = gFri; AppState.deckTitle = `${titlePrefix} · 周五新知(${pool.length}句)`; AppState.isSundayTest = false;}
+  else if(day === 6) { pool = gFri; AppState.deckTitle = `${titlePrefix} · 周六复习(${pool.length}句)`; AppState.isSundayTest = false;}
   else { 
-    // 周日大考：合并一整周6个组 (60句)
     pool = [...gMon, ...gWed, ...gFri]; 
     AppState.deckTitle = `${titlePrefix} · 周日大考(${pool.length}句)`; 
     AppState.isSundayTest = true;
   }
   
-  // 打乱今天的卡片队列
   AppState.activeDeck = [...pool].sort(() => Math.random() - 0.5);
   AppState.totalCards = AppState.activeDeck.length;
   AppState.learnedCards = 0;
   AppState.todayWords = pool; 
 
-  // 初次生成今日计划后，立即写入本地缓存
   saveStateToCache(tab);
 }
 
@@ -391,11 +386,10 @@ window.advanceWeek = function() {
     let w = parseInt(localStorage.getItem(`quantum_week_${AppState.currentTab}`)) || 0;
     localStorage.setItem(`quantum_week_${AppState.currentTab}`, w + 1);
     
-    // 清除今日缓存，强制重载新一周的数据
     const todayStr = new Date().toISOString().split('T')[0];
     localStorage.removeItem(`quantum_state_${AppState.currentTab}_${todayStr}`);
     
-    showToast("🎉 恭喜！成功晋升至下一周高频词库！");
+    showToast("🎉 恭喜！成功晋升至下一周！");
     switchTab(AppState.currentTab);
 }
 
@@ -429,7 +423,6 @@ function renderSwipeView() {
   const container = document.getElementById('main-content');
   if (AppState.activeDeck.length === 0) {
     let advanceHtml = '';
-    // 如果是周日，显示进入下一周的按钮
     if (AppState.isSundayTest) {
         advanceHtml = `<button onclick="advanceWeek()" class="mt-8 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-500 rounded-xl text-white font-bold shadow-[0_0_20px_rgba(6,182,212,0.4)] active:scale-95 transition-all w-full tracking-widest">晋升下一周词库 ➔</button>`;
     }
@@ -538,9 +531,7 @@ window.handleSwipe = function(direction) {
         AppState.isListening = false;
     }
     
-    // 每次滑动后保存进度到本地
     saveStateToCache(AppState.currentTab);
-    
     renderSwipeView();
   }, 250);
 };
